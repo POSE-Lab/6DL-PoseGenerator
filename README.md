@@ -19,7 +19,7 @@ This repo utilizes OpenGL and custom shaders for rendering synthetic data of a g
     - Random rotations,translations and magnitude
     - Depth scale
   
-Note: Only ```ply``` file models with texture (optional) are supported at the momment.
+Note: Only ```ply``` file models with texture (optional) or vertex colors are supported at the momment.
 
 # Installation
 
