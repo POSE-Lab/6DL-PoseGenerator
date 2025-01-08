@@ -4,13 +4,13 @@ FBO_HEIGHT: 720
 SSAA_factor: 4
 phis: [0,360,40]
 thetas: [0,90,30]
-distances: [3,9,1]
+distances: [100,200,50]
 background_color: [0.0, 0.0, 0.0, 0.0]
 
 # Shaders
 shaders_path: "./shaders/"
 render_modes: ['texture','triangles','depth']
-texture_file: './demo/cube_texture.png'
+texture_file: Null
 
 # general lighting settings
 light_position: Null #[10.0, 100.0, 300]
@@ -27,20 +27,20 @@ triangles_object_color: [0.71, 0.69, 0.70]
 triangles_light_color: [1.0, 1.0, 1.0]
 
 # poses
-rotation_perturbation: True
-translation_perturbation: True
+rotation_perturbation: False
+translation_perturbation: False
 rotation_xrange: [-20.5,10.5]
 rotation_yrange: [-1.5, 1.5]
 rotation_zrange: [-1.5, 1.5]
-translation_xrange: [-2.0,2.0]
-translation_yrange: [-2.0, 2.0]
-translation_zrange: [-1.5, -1.5]
+translation_xrange: [-50.0,50.0]
+translation_yrange: [-50.0, 50.0]
+translation_zrange: [-50.0, -50.0]
 
 # depth rendering
-depth_scale: 5000
+depth_scale: 100
 
 # Model
-model_path: "./demo/cube.ply"
+model_path: "./demo/models/duck.ply"
 object_id: 3 # For scene_gt.json file
 
 # Output

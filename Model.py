@@ -53,6 +53,7 @@ class Model:
         self.normals = np.asarray(self.model.vertex_normals)
 
         self.uvs = self.load_per_vertex_uvs()
+        self.colors = np.asarray(self.model.vertex_colors)
         self.create_buffers()
 
     def load_per_vertex_uvs(self) -> Union[np.ndarray, None]:
@@ -107,15 +108,23 @@ class Model:
 
         # Add UVs if available
         if self.uvs is not None:
-            self.pose_normal_uvs_buffer = np.hstack(
+            self.pose_normal_texture_buffer = np.hstack(
                 [
                     self.model_points,  # positions: [x, y, z]
                     self.normals,  # normals: [nx, ny, nz]
                     self.uvs,  # UVs: [u, v]
                 ]
             ).flatten()
+        elif self.colors is not None:
+            self.pose_normal_texture_buffer = np.hstack(
+                [
+                    self.model_points,  # positions: [x, y, z]
+                    self.normals,  # normals: [nx, ny, nz]
+                    self.colors,  # colors: [r, g, b]
+                ]
+            ).flatten()
         else:
-            self.pose_normal_uvs_buffer = (
+            self.pose_normal_texture_buffer = (
                 self.pos_normal_buffer
             )  # Fallback to position + normals
 

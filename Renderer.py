@@ -380,7 +380,9 @@ def save_depth(path: str, im: np.ndarray, framebuffer: Framebuffer) -> None:
         w_depth.write(f, np.reshape(im_uint16, (-1, im_uint16.shape[1])))
 
 
-def save_DrawBuffer_render_depth(framebuffer: Framebuffer, img_id: int, savePath: str, subfolder_name: str) -> None:
+def save_DrawBuffer_render_depth(
+    framebuffer: Framebuffer, img_id: int, savePath: str, subfolder_name: str
+) -> None:
     """
     Saves the depth buffer rendered from the given framebuffer to a specified path.
     Args:
@@ -609,7 +611,7 @@ def RenderRGBD(params: params):
         arr_ind_lines = np.array(model.lines_indices, dtype=np.uint32)
     if "texture" in params.render_modes:
         # print(model.uvs)
-        arr_texture = np.array(model.pose_normal_uvs_buffer, dtype=np.float32)
+        arr_texture = np.array(model.pose_normal_texture_buffer, dtype=np.float32)
 
     if "depth" in params.render_modes:
         VAO_depth = glGenVertexArrays(1)
@@ -636,7 +638,6 @@ def RenderRGBD(params: params):
         VAO_triangles = glGenVertexArrays(1)
         VBO_triangles = glGenBuffers(1)
         EBO_triangles = glGenBuffers(1)
-        arr_texture = np.array(model.pose_normal_uvs_buffer, dtype=np.float32)
         glBindVertexArray(VAO_triangles)
         glBindBuffer(GL_ARRAY_BUFFER, VBO_triangles)
         glBufferData(
@@ -696,56 +697,93 @@ def RenderRGBD(params: params):
         VBO_texture = glGenBuffers(1)
         EBO_triangles_texture = glGenBuffers(1)
 
-        glBindVertexArray(VAO_texture)
-        glBindBuffer(GL_ARRAY_BUFFER, VBO_texture)
-        glBufferData(GL_ARRAY_BUFFER, arr_texture.nbytes, arr_texture, GL_STATIC_DRAW)
+        if model.uvs is not None:
+            glBindVertexArray(VAO_texture)
+            glBindBuffer(GL_ARRAY_BUFFER, VBO_texture)
+            glBufferData(
+                GL_ARRAY_BUFFER, arr_texture.nbytes, arr_texture, GL_STATIC_DRAW
+            )
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_triangles_texture)
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, arr_ind.nbytes, arr_ind, GL_STATIC_DRAW)
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_triangles_texture)
+            glBufferData(
+                GL_ELEMENT_ARRAY_BUFFER, arr_ind.nbytes, arr_ind, GL_STATIC_DRAW
+            )
 
-        glEnableVertexAttribArray(0)
-        glVertexAttribPointer(
-            0, 3, GL_FLOAT, GL_FALSE, arr_texture.itemsize * 8, ctypes.c_void_p(0)
-        )
+            glEnableVertexAttribArray(0)
+            glVertexAttribPointer(
+                0, 3, GL_FLOAT, GL_FALSE, arr_texture.itemsize * 8, ctypes.c_void_p(0)
+            )
 
-        glEnableVertexAttribArray(1)
-        glVertexAttribPointer(
-            1, 3, GL_FLOAT, GL_FALSE, arr_texture.itemsize * 8, ctypes.c_void_p(12)
-        )
+            glEnableVertexAttribArray(1)
+            glVertexAttribPointer(
+                1, 3, GL_FLOAT, GL_FALSE, arr_texture.itemsize * 8, ctypes.c_void_p(12)
+            )
 
-        glEnableVertexAttribArray(2)
-        glVertexAttribPointer(
-            2, 2, GL_FLOAT, GL_FALSE, arr_texture.itemsize * 8, ctypes.c_void_p(24)
-        )
+            glEnableVertexAttribArray(2)
+            glVertexAttribPointer(
+                2, 2, GL_FLOAT, GL_FALSE, arr_texture.itemsize * 8, ctypes.c_void_p(24)
+            )
 
-        texture = glGenTextures(1)
-        glBindTexture(GL_TEXTURE_2D, texture)
+            texture = glGenTextures(1)
+            glBindTexture(GL_TEXTURE_2D, texture)
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 
-        image_tex = Image.open(params.texture_file)  # "FINAL_8192_edited.png"
-        tex_image_data = image_tex.convert("RGBA").tobytes()
-        glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            GL_RGBA,
-            image_tex.width,
-            image_tex.height,
-            0,
-            GL_RGBA,
-            GL_UNSIGNED_BYTE,
-            tex_image_data,
-        )
+            image_tex = Image.open(params.texture_file)  # "FINAL_8192_edited.png"
+            tex_image_data = image_tex.convert("RGBA").tobytes()
+            glTexImage2D(
+                GL_TEXTURE_2D,
+                0,
+                GL_RGBA,
+                image_tex.width,
+                image_tex.height,
+                0,
+                GL_RGBA,
+                GL_UNSIGNED_BYTE,
+                tex_image_data,
+            )
 
-        shader_texture = shader_program_from_shaders(
-            jn(params.shaders_path, "vertex_shader_texture.glsl"),
-            None,
-            jn(params.shaders_path, "fragment_shader_texture.glsl"),
-        )
+            shader_texture = shader_program_from_shaders(
+                jn(params.shaders_path, "vertex_shader_texture.glsl"),
+                None,
+                jn(params.shaders_path, "fragment_shader_texture.glsl"),
+            )
+        else:
+            glBindVertexArray(VAO_texture)
+            glBindBuffer(GL_ARRAY_BUFFER, VBO_texture)
+            glBufferData(
+                GL_ARRAY_BUFFER, arr_texture.nbytes, arr_texture, GL_STATIC_DRAW
+            )
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_triangles_texture)
+            glBufferData(
+                GL_ELEMENT_ARRAY_BUFFER, arr_ind.nbytes, arr_ind, GL_STATIC_DRAW
+            )
+
+            glEnableVertexAttribArray(0)
+            glVertexAttribPointer(
+                0, 3, GL_FLOAT, GL_FALSE, arr_texture.itemsize * 9, ctypes.c_void_p(0)
+            )
+
+            glEnableVertexAttribArray(1)
+            glVertexAttribPointer(
+                1, 3, GL_FLOAT, GL_FALSE, arr_texture.itemsize * 9, ctypes.c_void_p(12)
+            )
+
+            glEnableVertexAttribArray(2)
+            glVertexAttribPointer(
+                2, 3, GL_FLOAT, GL_FALSE, arr_texture.itemsize * 9, ctypes.c_void_p(24)
+            )
+
+            shader_texture = shader_program_from_shaders(
+                jn(params.shaders_path, "vertex_shader_vcolors.glsl"),
+                None,
+                jn(params.shaders_path, "fragment_shader_vcolors.glsl"),
+            )
 
     dists = range(
         params.distances[0],
@@ -888,9 +926,10 @@ def RenderRGBD(params: params):
                         )
 
                     if "texture" in params.render_modes:
-                        glBindTexture(GL_TEXTURE_2D, texture)
-                        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+                        if model.uvs is not None:
+                            glBindTexture(GL_TEXTURE_2D, texture)
                         glUseProgram(shader_texture)
+                        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
                         glEnable(GL_DEPTH_TEST)
 
                         # same trasnformation for all modes

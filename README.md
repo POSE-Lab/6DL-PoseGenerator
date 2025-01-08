@@ -1,5 +1,6 @@
 # 6DL-PoseGenerator
 
+![Splash](./demo/demo.png)
 ## Overview
 
 This repo utilizes OpenGL and custom shaders for rendering synthetic data of a given 3D Model (texture is optional) that can be used to train 6D pose estimation algorithms or even for 2D segmentation tasks. The structure of the code is fairly simple:
