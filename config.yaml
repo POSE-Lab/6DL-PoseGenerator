@@ -1,0 +1,48 @@
+# Render params
+FBO_WIDTH: 1280
+FBO_HEIGHT: 720
+SSAA_factor: 4
+phis: [0,360,40]
+thetas: [0,90,30]
+distances: [3,9,1]
+background_color: [0.0, 0.0, 0.0, 0.0]
+
+# Shaders
+shaders_path: "./shaders/"
+render_modes: ['texture','triangles','depth']
+texture_file: './demo/cube_texture.png'
+
+# general lighting settings
+light_position: Null #[10.0, 100.0, 300]
+
+# texture + lighting
+texture_ambient_strength: 0.3
+texture_specular_strengh: 0.55
+texture_light_color: [1.0, 1.0, 1.0]
+
+# triangles + lighting
+triangles_ambient_strength: 0.1
+triangles_specular_strength: 0.55
+triangles_object_color: [0.71, 0.69, 0.70]
+triangles_light_color: [1.0, 1.0, 1.0]
+
+# poses
+rotation_perturbation: True
+translation_perturbation: True
+rotation_xrange: [-20.5,10.5]
+rotation_yrange: [-1.5, 1.5]
+rotation_zrange: [-1.5, 1.5]
+translation_xrange: [-2.0,2.0]
+translation_yrange: [-2.0, 2.0]
+translation_zrange: [-1.5, -1.5]
+
+# depth rendering
+depth_scale: 5000
+
+# Model
+model_path: "./demo/cube.ply"
+object_id: 3 # For scene_gt.json file
+
+# Output
+savePath: './output'
+
