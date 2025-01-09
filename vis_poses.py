@@ -87,7 +87,8 @@ def run(args):
         glob.glob(args.images + "/*.png"),
         key=lambda x: int(os.path.basename(x).split(".")[0]),
     )
-
+    if not os.path.exists(args.outPath):
+        os.makedirs(args.outPath)
     height, width, _ = cv.imread(image_filenames[0]).shape
     # create framebuffer
     init_glfw(width, height)

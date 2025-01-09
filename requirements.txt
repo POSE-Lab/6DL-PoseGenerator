@@ -1,6 +1,6 @@
 numpy==2.2.1
 pyopengl==3.1.7
-opencv-python==4.10.0
+opencv-python==4.10.0.84
 pyrr==0.10.3
 pypng==0.0.20
 glfw==2.8.0
@@ -10,3 +10,6 @@ open3d==0.18.0
 plyfile==1.1
 tyro==0.9.6
 rich==13.9.4
+pillow==11.1.0
+tqdm==4.67.1
+pyyaml==6.0.2
