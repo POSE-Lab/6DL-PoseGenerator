@@ -59,7 +59,7 @@ Modify the ```config.yaml``` file according to your requirements, including also
     - triangles_object_color: Color of the mesh only when rendering in ```triangles``` mode.
 - Pose associated parameters:
     - {rotation,translation}_perturbation: Introduces random rotations/translations for diverse pose distributions.
-    - {rotation,translation}_{x,y,z}range: Magnitudes of random rotations/translations in the same units as the object model.
+    - {rotation,translation}_{x,y,z}range: Magnitudes of random rotations/translations (angles in degrees and distances in the same units as the object model).
     - depth_scale: Depth is saved as a 16-Bit Gray scale image. Thus the pixel value range from 0-65535. A depth_scale = 1 ensures a 1:1 correspondence with the model's units. For small models, increasing the depth scale is recommended.
 - Io associated parameters:
     - model_path: Path to the 3D model
