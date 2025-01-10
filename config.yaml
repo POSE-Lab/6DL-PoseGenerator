@@ -5,7 +5,7 @@ SSAA_factor: 4
 phis: [0,360,40]
 thetas: [0,90,30]
 distances: [100,200,50]
-background_color: [0.0, 0.0, 0.0, 0.0]
+background_color: [0.0, 0.0, 0.0]
 
 # Shaders
 shaders_path: "./shaders/"

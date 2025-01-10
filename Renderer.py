@@ -601,7 +601,6 @@ def RenderRGBD(params: params):
     model = Model(filename=params.model_path)
     stats = model.getModelStats()
     far, near = camera.getClipingPlanes(stats)
-    print(f"Far: {far}, Near: {near}")
 
     arr_vrt = model.model_points.flatten()
     arr_vrt_normals = np.array(model.pos_normal_buffer, dtype=np.float32)
@@ -610,7 +609,6 @@ def RenderRGBD(params: params):
     if "lines" in params.render_modes:
         arr_ind_lines = np.array(model.lines_indices, dtype=np.uint32)
     if "texture" in params.render_modes:
-        # print(model.uvs)
         arr_texture = np.array(model.pose_normal_texture_buffer, dtype=np.float32)
 
     if "depth" in params.render_modes:
@@ -794,12 +792,11 @@ def RenderRGBD(params: params):
     thetas = range(
         params.thetas[0], params.thetas[1] + params.thetas[2], params.thetas[2]
     )
-    print(len(dists), len(thetas), len(phis))
     progress = 0
     num_items_rendered = CalcRenderedImagesNumber(len(dists), len(thetas), len(phis))
     Rs, Ts = [], []
     print(f"#{num_items_rendered} items will be rendered")
-    glClearColor(*params.background_color)
+    glClearColor(*params.background_color,1.0)
     with tqdm.tqdm(range(num_items_rendered), desc="Rendering...") as pbar:
         for dist in dists:
             for theta in thetas:
@@ -821,7 +818,6 @@ def RenderRGBD(params: params):
                     K = compute_K_from_perspective(
                         45, params.FBO_WIDTH, params.FBO_HEIGHT
                     )
-                    # print("Intrinsic Matrix K:", K)
 
                     # random pose perturbation
                     if params.rotation_perturbation:
