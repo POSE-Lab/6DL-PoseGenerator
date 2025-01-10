@@ -52,7 +52,7 @@ Modify the ```config.yaml``` file according to your requirements, including also
     - render_modes: Modes to render, e.g., 'triangles' (geometry without texture but with lighting), 'texture' (textured model with lighting), and 'depth' (depth image rendering).
     - texture_file: Path to texture file.
 
-    **Note:** o use RGB vertex colors instead of a texture, set ```texture_file = Null```. Otherwise, provide the path to the texture image.
+    **Note:** To use RGB vertex colors instead of a texture, set ```texture_file = Null```. Otherwise, provide the path to the texture image.
 - Lighting settings:
     - light_position: Position of the light. By default, it is set to ```Null```, meaning the light coincides with the current camera position.
     - {triangles,texture}_{ambient,specular}_strength: Control Phong shading parameters.
@@ -61,9 +61,9 @@ Modify the ```config.yaml``` file according to your requirements, including also
     - {rotation,translation}_perturbation: Introduces random rotations/translations for diverse pose distributions.
     - {rotation,translation}_{x,y,z}range: Magnitudes of random rotations/translations (angles in degrees and distances in the same units as the object model).
     - depth_scale: Depth is saved as a 16-Bit Gray scale image. Thus the pixel value range from 0-65535. A depth_scale = 1 ensures a 1:1 correspondence with the model's units. For small models, increasing the depth scale is recommended.
-- Io associated parameters:
+- I/Ο associated parameters:
     - model_path: Path to the 3D model
-    - object_id: Object ID used for writing the ```scene_gt.json``` file (see BOP format). (See [BOP format](https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md)) 
+    - object_id: Object ID used for writing the ```scene_gt.json``` file (See [BOP format](https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md)) 
     - savePath: Path to save renderings.
 
 
@@ -83,7 +83,7 @@ The ```savePath``` directory (set in config.yaml) should have the following stru
 - ```geom/rgb/```: Images rendered in ```triangles``` mode (See [Parameters](#parameters) section).
 - ```texture/rgb/```: Images renderd in ```texture``` mode (See [Parameters](#parameters) section).
 - ```scene_gt.json```: Poses in BOP format.
-- ```scene_camera.json```: Camera intrisics in BOP format. 
+- ```scene_camera.json```: Camera intrinsics in BOP format. 
 
 ## Demo example 1
 
