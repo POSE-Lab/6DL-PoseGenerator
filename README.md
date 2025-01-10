@@ -12,6 +12,7 @@ This repository uses OpenGL and custom shaders to render synthetic data from a 3
 - [x] Supports PLY models (ASCII and binary) with associated texture or RGB vertex colors (both optional).
 - [x] Photorealistic rendering with lighting manipulation
 - [x] Depth rendering with a controllable depth scale.
+- [x] Tested in Ubuntu 20.04, 22.04 and Windows 11 
 
 
 # Installation
