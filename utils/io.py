@@ -61,7 +61,7 @@ class RenderingParams:
     # Distances: start,stop,step
     distances: list = field(default_factory=lambda: [300, 900, 100])
     # Background color
-    background_color: list = field(default_factory=lambda: [1.0, 1.0, 1.0, 1.0])
+    background_color: list = field(default_factory=lambda: [0.0, 0.0, 0.0])
 
 
 @dataclass
@@ -88,7 +88,7 @@ class TextureLightingParams:
     texture_ambient_strength: float = 0.3
     # specular strength factor for texture rendering
     texture_specular_strength: float = 0.55
-    # color of the emmited light
+    # color of the emitted light
     texture_light_color: list = field(default_factory=lambda: [1.0, 1.0, 1.0])
 
 
@@ -101,7 +101,7 @@ class GeometryLightingParams:
     triangles_specular_strength: float = 0.55
     # color of the triangle faces
     triangles_object_color: list = field(default_factory=lambda: [0.7, 0.7, 0.7])
-    # color of the emmited light
+    # color of the emitted light
     triangles_light_color: list = field(default_factory=lambda: [1.0, 1.0, 1.0])
 
 
@@ -158,6 +158,7 @@ class Render_args:
     poses: PosesParams = field(default_factory=PosesParams)
     model: ModelParams = field(default_factory=ModelParams)
 
+
 def merge_params(config_params, cli_params):
     """
     Merge CLI parameters with config parameters, giving precedence to CLI parameters.
@@ -167,6 +168,7 @@ def merge_params(config_params, cli_params):
         if value is not None:
             config_dict[key] = value
     return RenderParams(config_dict)
+
 
 def parse_yaml(config_file: str) -> dict:
     """

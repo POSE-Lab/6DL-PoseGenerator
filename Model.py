@@ -53,7 +53,8 @@ class Model:
         self.normals = np.asarray(self.model.vertex_normals)
 
         self.uvs = self.load_per_vertex_uvs()
-        self.colors = np.asarray(self.model.vertex_colors)
+        if self.model.has_vertex_colors():
+            self.colors = np.asarray(self.model.vertex_colors)
         self.create_buffers()
 
     def load_per_vertex_uvs(self) -> Union[np.ndarray, None]:
@@ -79,7 +80,6 @@ class Model:
                 t = vertex_data["t"]
                 return np.column_stack((s, t))  # Combine into Nx2 array
             else:
-                print("UV attributes (s, t) not found in the vertex data.")
                 return None
         except Exception as e:
             print(f"Error loading UVs: {e}")
