@@ -42,7 +42,7 @@ python vis_poses.py \
 You can view the availabe CLI arguments by running ```python vis_poses.py --help```.
 # Parameters
 
-Modify the ```config.yaml``` file according to your requirements, including also the 3D model path and output path. Key parameters you can modify include::
+Modify the ```config.yaml``` file according to your requirements, including also the 3D model path and output path. Key parameters you can modify include:
 
 - General Rendering parameters:
     - FBO_WIDTH, FBO_HEIGHT: Resolution of rendered images.
@@ -79,7 +79,7 @@ The ```savePath``` directory (set in config.yaml) should have the following stru
 ├── scene_gt.json
 └── scene_camera.json
 ```
-- ```depth```: Contains depth images.
+- ```depth```: Contains the depth images.
 - ```geom/rgb/```: Images rendered in ```triangles``` mode (See [Parameters](#parameters) section).
 - ```texture/rgb/```: Images renderd in ```texture``` mode (See [Parameters](#parameters) section).
 - ```scene_gt.json```: Poses in BOP format.
@@ -104,7 +104,7 @@ With ```rotation_perturbation = True``` and ```translation_perturbation = True``
 
 ## Citation
 
-This repository extends the implementation used in our paper, [Crane Spreader Pose Estimation from a Single View](https://www.scitepress.org/PublishedPapers/2023/117888/117888.pdf). TRenderings from this pipeline were used to train a 6D pose estimation deep learning algorithm with synthetic data.
+This repository extends the implementation used in our paper, [Crane Spreader Pose Estimation from a Single View](https://www.scitepress.org/PublishedPapers/2023/117888/117888.pdf). Renderings from this pipeline were used to train a 6D pose estimation deep learning algorithm with synthetic data.
 
 If you find this code useful, please cite it using the following BibTeX entry.
 
