@@ -25,7 +25,7 @@ cd 6DL-PoseGenerator
 pip install -r requirements.txt
 ```
 # Usage
-1. Modify the ```config.yaml``` according to your needs (See [Parameters](#parameters) section).
+1. Modify the ```config.yaml``` according to your requirements (See [Parameters](#parameters) section).
 2. Run ```python render.py --io.config config.yaml``` .
 
 You can find a full list of available parameters also from the CLI by typing ```python render.py --help```.
