@@ -5,7 +5,7 @@
 ![Splash](./demo/demo.png)
 ## Overview
 
-This repository uses OpenGL and custom shaders to render synthetic data from a 3D model of an object (with or without texture). The generated data can be used to train 6D object pose estimation algorithms or for 2D segmentation tasks.
+This repository utilizes OpenGL and custom shaders to render synthetic data given a 3D model of an object (with or without texture). The generated data can be utilized for training 6D object pose estimation algorithms or for 2D segmentation tasks.
 
 ## Important features:
 - [x] [BOP format](https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md) compatibility
