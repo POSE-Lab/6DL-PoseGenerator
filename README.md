@@ -61,7 +61,7 @@ Modify the ```config.yaml``` file according to your requirements, including also
 - Pose associated parameters:
     - {rotation,translation}_perturbation: Introduces random rotations/translations for diverse pose distributions.
     - {rotation,translation}_{x,y,z}range: Magnitudes of random rotations/translations (angles in degrees and distances in the same units as the object model).
-    - depth_scale: Depth is saved as a 16-Bit Gray scale image. Thus the pixel value range from 0-65535. A depth_scale = 1 ensures a 1:1 correspondence with the model's units. For small models, increasing the depth scale is recommended.
+    - depth_scale: Depth is saved as a 16-Bit Gray scale image. Thus the pixel values range from 0-65535. A depth_scale = 1 ensures a 1:1 correspondence with the model's units. For small models, increasing the depth scale is recommended.
 - I/Ο associated parameters:
     - model_path: Path to the 3D model
     - object_id: Object ID used for writing the ```scene_gt.json``` file (See [BOP format](https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md)) 
