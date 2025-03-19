@@ -18,6 +18,9 @@ from os.path import join as jn
 import pyrr
 import tqdm
 
+from vis_modes import read_models_vertices, build_cuboid_from_model, draw_cuboid3D_on_image
+
+
 
 def remove_black_background(rendered_image, threshold=0):
     """
@@ -80,6 +83,10 @@ def overlay_with_alpha(background, object_image, alpha_mask, opacity=1.0):
 
 def run(args):
 
+    model_basename = os.path.basename(args.model_path)          # "obj_000008.ply"
+    obj_id_str     = model_basename.split("_")[1].split(".")[0] # "000008"
+    desired_obj_id = int(obj_id_str)
+
     poses = read_json(args.poses)
     model = Model(filename=args.model_path)
     camera_params = read_json(args.camera_params)
@@ -90,6 +97,10 @@ def run(args):
     if not os.path.exists(args.outPath):
         os.makedirs(args.outPath)
     height, width, _ = cv.imread(image_filenames[0]).shape
+
+    vertices = read_models_vertices(args.model_path)
+    cuboid = build_cuboid_from_model(vertices, axis_up='z')
+
     # create framebuffer
     init_glfw(width, height)
     framebuffer = CreateFramebuffer(width, height, GL_RGB32F, GL_RGBA, GL_FLOAT)
@@ -100,6 +111,7 @@ def run(args):
     arr_ind = np.array(model.face_indices, dtype=np.uint32).flatten()
     stats = model.getModelStats()
     far, near = camera.getClipingPlanes(stats)
+
 
     VAO_triangles = glGenVertexArrays(1)
     VBO_triangles = glGenBuffers(1)
@@ -136,16 +148,47 @@ def run(args):
     for idx, img in enumerate(tqdm.tqdm(image_filenames, desc="Processing images")):
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        pose_etry = poses[os.path.basename(img).strip(".png")]
-        rotation = pose_etry[0]["cam_R_m2c"]
-        translation = pose_etry[0]["cam_t_m2c"]
+        #pose_etry = poses[os.path.basename(img).strip(".png")]
+
+        basename = os.path.basename(img)
+        img_num_str = os.path.splitext(basename)[0]
+        key = str(int(img_num_str))
+
+        pose_etry = poses.get(key)
+
+        all_poses_this_img = poses.get(key, [])
+        if not all_poses_this_img:
+            # No poses at all for this image, skip
+            continue
+
+        matching_pose = None
+        for item in all_poses_this_img:
+            if item["obj_id"] == desired_obj_id:
+                matching_pose = item  # Store the matching pose
+                break
+
+        if not matching_pose:
+            continue
+
+        #rotation = pose_etry[0]["cam_R_m2c"]
+        #translation = pose_etry[0]["cam_t_m2c"]
+
+        rotation = matching_pose["cam_R_m2c"]
+        translation = matching_pose["cam_t_m2c"]
+
         RT = np.eye(4)
         RT[:3, :3] = np.array(rotation).reshape(3, 3)
         RT[:3, -1] = np.array(translation).reshape(
             3,
         )
-        K = camera_params[os.path.basename(img).strip(".png")]["cam_K"]
-        K = np.asarray(K).reshape(3, 3).astype(float)
+        #K = camera_params[os.path.basename(img).strip(".png")]["cam_K"]
+
+        cam_params_this_img = camera_params.get(key, {})
+        if not cam_params_this_img:
+            continue
+        K = np.asarray(cam_params_this_img["cam_K"]).reshape(3, 3).astype(float)
+
+        #K = np.asarray(K).reshape(3, 3).astype(float)
 
         proj = [
             2 * K[0, 0] / float(width),
@@ -167,6 +210,7 @@ def run(args):
         ]
         proj = np.asarray(proj).reshape(4, 4)
         RT = RT.T @ OPENGL_TO_OPENCV
+
         res = np.dot(
             np.array([RT[0, -1], RT[1, -1], RT[2, -1], 1.0]), np.linalg.inv(RT)
         )
@@ -210,6 +254,19 @@ def run(args):
         # Overlay the isolated object onto the background
         overlayed = overlay_with_alpha(
             background, isolated_object, alpha_mask, opacity=args.opacity
+        )
+
+        RT_opencv = np.eye(4)
+        RT_opencv[:3, :3] = np.array(rotation).reshape(3, 3)
+        RT_opencv[:3, -1] = np.array(translation).reshape(3)
+
+        draw_cuboid3D_on_image(
+            overlayed,  # Use the saved vis_poses output
+            cuboid=cuboid,
+            pose=RT_opencv,
+            Kmat=K,
+            thickness=1,
+            color=(0, 0, 255)
         )
         cv.imwrite(args.outPath + f"/{idx}.png", overlayed)
 
