@@ -191,22 +191,10 @@ def run(args):
         #K = np.asarray(K).reshape(3, 3).astype(float)
 
         proj = [
-            2 * K[0, 0] / float(width),
-            -2 * 0 / float(width),
-            0,
-            0,
-            0,
-            2 * K[1, 1] / float(height),
-            0,
-            0,
-            1 - 2 * (K[0, 2] / float(width)),
-            2 * (K[1, 2] / float(height)) - 1,
-            -(far + near) / (far - near),
-            -1,
-            0,
-            0,
-            2 * far * near / (near - far),
-            0,
+            2 * K[0, 0] / float(width), -2 * 0 / float(width), 0, 0,
+            0, 2 * K[1, 1] / float(height),0, 0,
+            1 - 2 * (K[0, 2] / float(width)), 2 * (K[1, 2] / float(height)) - 1, -(far + near) / (far - near), -1,
+            0, 0, 2 * far * near / (near - far),0
         ]
         proj = np.asarray(proj).reshape(4, 4)
         RT = RT.T @ OPENGL_TO_OPENCV

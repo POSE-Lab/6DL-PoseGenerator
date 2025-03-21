@@ -55,6 +55,8 @@ class Model:
         self.uvs = self.load_per_vertex_uvs()
         if self.model.has_vertex_colors():
             self.colors = np.asarray(self.model.vertex_colors)
+        else:
+            self.colors = None
         self.create_buffers()
 
     def load_per_vertex_uvs(self) -> Union[np.ndarray, None]:
